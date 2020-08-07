@@ -1,7 +1,8 @@
 ##
 ## Script Create by WebFooL for The Untangle Community
 ##
-$Request = Invoke-WebRequest "https://easylist.to/easylist/easylist.txt"
+$easylistsource = "https://easylist.to/easylist/easylist.txt"
+$Request = Invoke-WebRequest $easylistsource
 $EasyList = $Request.Content
 $filenamejson = "ADImport.json"
 $filenamecsv = "ADImport.csv"
@@ -11,6 +12,8 @@ $hash = @'
 string,blocked,javaClass,markedForNew,markedForDelete,enabled
 
 '@
+
+write-host "Will now work for a whule do not panic!"
 
 ForEach ($line in $($EasyList -split "`n"))
 {
@@ -28,7 +31,9 @@ ForEach ($line in $($EasyList -split "`n"))
 }
 #Tempstore as CSV
 $hash | Set-Content -Path $filenamecsv
-
 #Convert to Json
-import-csv $filenamecsv | ConvertTo-Json | Set-Content -Path $filenamejson
-#Done
+import-csv $filenamecsv | ConvertTo-Json -Compress | Set-Content -Path $filenamejson
+#Count lines in the CSV
+$numberoflines = (Import-Csv $filenamecsv | Measure-Object -Property string).Count
+#Write friendly exit message
+Write-Host "Done you now have a $filenamejson with $numberoflines lines from $easylistsource"
