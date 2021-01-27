@@ -28,7 +28,7 @@ Write-Progress -Activity "Processing Easylist" -CurrentOperation $line -PercentC
     #Do Nothing
     }else {
         #Create Untangle JSON
-        $hash += "$line,true,com.untangle.uvm.app.GenericRule,true,false,true`r`n"
+        $hash += "`n$line,true,com.untangle.uvm.app.GenericRule,true,false,true`r"
         $counter++
     }    
 }
